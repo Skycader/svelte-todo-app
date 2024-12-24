@@ -1,47 +1,37 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+
+  import AddTodo from "./components/add-todo.svelte";
+  import TodoList from "./components/todo-list.svelte";
+  import { Todo, type TodoInterface } from "./models/todo.model";
+
+  let todos: TodoInterface[] = $state([])
+
+  const addTodo = (title: string) => { todos.push(new Todo(title)); };
+  const toggleTodo = (id: number) => { todos = todos.map(todo => todo.id === id ? {...todo, done: !todo.done} : todo)}
+  const removeTodo = (id: number) => { todos = todos.filter(todo => todo.id !== id) }
+
 </script>
+<div class="container">
+	<br />
+	<nav>
+    	<h3>Svelte Todo App</h3>
+  	</nav>
 
-<main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+	<hr />
+</div>
 
-  <div class="card">
-    <Counter />
-  </div>
+<div class="container">
+	<AddTodo addTodo={addTodo} />
+</div>
 
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
+<br />
 
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
-</main>
+<TodoList todos={todos} removeTodo={removeTodo} toggleTodo={toggleTodo}/>
 
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
-</style>
+<br/>
+
+{#if todos.length > 0}
+<div class="container d-flex justify-content-center">
+	<span>{todos.reduce((total, todo) => total += todo.done ? 1 : 0, 0)} of {todos.length} done</span>
+</div>
+{/if}
