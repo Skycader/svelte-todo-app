@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
 
   import AddTodo from "./components/add-todo.svelte";
   import TodoList from "./components/todo-list.svelte";
@@ -6,9 +8,17 @@
 
   let todos: TodoInterface[] = $state([])
 
-  const addTodo = (title: string) => { todos.push(new Todo(title)); };
+  onMount(()=>{
+    todos = JSON.parse(localStorage.getItem('svelte-todos') || '[]');
+  })
+
+  const addTodo = (title: string) => { todos.push(new Todo(title)) };
   const toggleTodo = (id: number) => { todos = todos.map(todo => todo.id === id ? {...todo, done: !todo.done} : todo)}
   const removeTodo = (id: number) => { todos = todos.filter(todo => todo.id !== id) }
+
+  $effect(()=>{
+    localStorage.setItem('svelte-todos',JSON.stringify(todos))
+  })
 
 </script>
 <div class="container">
