@@ -8,7 +8,7 @@ const {todo, removeTodo, toggleTodo} = $props();
 	<div class="card-body">
 		<div class="d-flex justify-content-between align-items-center">
            <div>
-                <input class="form-check-input me-1" type="checkbox" checked={todo.done} onclick={()=>toggleTodo(todo.id)}>
+                <input class="form-check-input me-1" role="button" type="checkbox" checked={todo.done} onclick={()=>toggleTodo(todo.id)}>
                 <span>{todo.title}</span>
             </div>
 			<button type="button" class="btn btn-danger"
